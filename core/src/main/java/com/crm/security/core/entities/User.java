@@ -1,6 +1,7 @@
 package com.crm.security.core.entities;
 
 import com.crm.security.core.enums.UserRoles;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,10 +22,9 @@ import java.util.List;
 public class User implements UserDetails {
 
         @Id
-        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
-        @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "user_id")
-        private Long id;
+        private Integer id;
 
         @Column(unique = true, nullable = false)
         private String username;
@@ -44,11 +44,13 @@ public class User implements UserDetails {
 
 
         @Override
+        @NonNull
         public Collection<? extends GrantedAuthority> getAuthorities() {
                 return List.of( new SimpleGrantedAuthority(role.name()));
         }
 
         @Override
+        @Nonnull
         public String getUsername() {
                 return username;
         }
