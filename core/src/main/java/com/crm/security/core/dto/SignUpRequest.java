@@ -12,7 +12,7 @@ public class SignUpRequest {
 
     @Size(min = 5, max = 64)
     @NotBlank
-    private String login;
+    private String username;
 
     @Size(min = 6, max = 255)
     @NotBlank

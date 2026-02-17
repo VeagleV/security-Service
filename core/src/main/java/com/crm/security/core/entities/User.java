@@ -2,8 +2,7 @@ package com.crm.security.core.entities;
 
 import com.crm.security.core.enums.UserRoles;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,8 +11,12 @@ import java.util.Collection;
 import java.util.List;
 
 
-@Data
 @Entity
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user")
 public class User implements UserDetails {
 
@@ -24,7 +27,7 @@ public class User implements UserDetails {
         private Long id;
 
         @Column(unique = true, nullable = false)
-        private String login;
+        private String username;
 
         @Column(name = "password_hash", nullable = false)
         private String password;
@@ -47,7 +50,7 @@ public class User implements UserDetails {
 
         @Override
         public String getUsername() {
-                return login;
+                return username;
         }
 
         @Override
