@@ -18,7 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails {
 
         @Id
@@ -46,7 +46,7 @@ public class User implements UserDetails {
         @Override
         @NonNull
         public Collection<? extends GrantedAuthority> getAuthorities() {
-                return List.of( new SimpleGrantedAuthority(role.name()));
+                return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
         }
 
         @Override

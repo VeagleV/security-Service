@@ -38,6 +38,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
 
         //Вытаскиваем токен из заголовка
         var authHeader = request.getHeader(HEADER_NAME);
+        logger.info("Authentication header: " + authHeader);
         if (StringUtils.isEmpty(authHeader) || !authHeader.startsWith(BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
@@ -46,21 +47,30 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
         var jwt = authHeader.substring(BEARER_PREFIX.length());
         var username = jwtService.extractUserName(jwt);
 
-        if (StringUtils.isEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+        logger.info("User: " + username);
+        logger.info("jwt: " + jwt);
+
+        logger.info("isNotEmpty?" + StringUtils.isNotEmpty(username));
+        logger.info("isAuth? " + (SecurityContextHolder.getContext().getAuthentication() == null));
+
+        if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService
                     .userDetailsService()
                     .loadUserByUsername(username);
 
+            logger.info("AFTER AUTH CHECK: " + userDetails);
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
+
+                logger.info("JWT TOKEN IS VALID");
+                logger.info("USER ROLE:" + userDetails.getAuthorities());
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        username,
+                        userDetails,
                         null,
                         userDetails.getAuthorities()
                 );
-
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);

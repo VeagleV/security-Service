@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-
+    @Autowired
     private UserRepository userRepository;
 
     public User save(User user) {
@@ -60,6 +60,12 @@ public class UserService {
     public void getAdmin(){
         var user = getCurrentUser();
         user.setRole(UserRoles.ADMIN);
+        save(user);
+    }
+
+    public void getSuperAdmin(){
+        var user = getCurrentUser();
+        user.setRole(UserRoles.SUPER_ADMIN);
         save(user);
     }
 }

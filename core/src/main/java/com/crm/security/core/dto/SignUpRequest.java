@@ -22,4 +22,7 @@ public class SignUpRequest {
     @NotBlank
     private String email;
 
+    @Size(max = 255)
+    @NotBlank
+    private String fio;
 }
