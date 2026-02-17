@@ -47,7 +47,12 @@ public class User implements UserDetails {
 
         @Override
         public String getUsername() {
-                return "";
+                return login;
+        }
+
+        @Override
+        public String getPassword() {
+                return password;
         }
 
         @Override
