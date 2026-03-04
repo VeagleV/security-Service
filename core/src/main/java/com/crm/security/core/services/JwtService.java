@@ -58,6 +58,39 @@ public class JwtService {
         return (userName.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
+    public boolean isTokenValidForGateway(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            Date exp = claims.getExpiration();
+            return exp != null && exp.after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Claims getClaims(String token) {
+        return extractAllClaims(token);
+    }
+
+    public Map<String, String> buildGatewayHeaders(Claims claims) {
+        Map<String, String> headers = new HashMap<>();
+
+        Object id = claims.get("id");
+        Object role = claims.get("role");
+        String username = claims.getSubject();
+
+        if (id != null) {
+            headers.put("X-User-Id", id.toString());
+        }
+        if (role != null) {
+            headers.put("X-User-Role", role.toString());
+        }
+        if (username != null) {
+            headers.put("X-User-Name", username);
+        }
+        return headers;
+    }
+
     /**
      * Извлечение данных из токена
      *

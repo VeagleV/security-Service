@@ -1,0 +1,47 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: security-Service
+              uri: lb://SECURITY-SERVICE
+              predicates:
+                - Path=/api/security/**
+              filters:
+                - name: authHeaderFilter
+
+            - id: algorithm-Service
+              uri: lb://ALGORITHM-SERVICE
+              predicates:
+                - Path=/api/algo/**
+              filters:
+                - name: authHeaderFilter
+
+            - id: warehouse-Service
+              uri: lb://WAREHOUSE-SERVICE
+              predicates:
+                - Path=/api/warehouse/**
+              filters:
+                - name: authHeaderFilter
+
+            - id: transport-Service
+              uri: lb://TRANSPORT-SERVICE
+              predicates:
+                - Path=/api/transport/**
+              filters:
+                - name: authHeaderFilter
+
+            - id: item-Management-Service
+              uri: lb://ITEM-MANAGEMENT-SERVICE
+              predicates:
+                - Path=/api/items/**
+              filters:
+                - name: authHeaderFilter
+
+            - id: delivery-Service
+              uri: lb://DELIVERY-SERVICE
+              predicates:
+                - Path=/api/delivery/**
+              filters:
+                - name: authHeaderFilter
