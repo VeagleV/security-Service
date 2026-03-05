@@ -4,13 +4,6 @@ spring:
       server:
         webflux:
           routes:
-            - id: security-service
-              uri: lb://SECURITY-SERVICE
-              predicates:
-                - Path=/api/security/**
-              filters:
-                - StripPrefix=2
-
             - id: algorithm-service
               uri: lb://ALGORITHM-SERVICE
               predicates:
@@ -27,7 +20,7 @@ spring:
                 - name: AuthComponent
                 - StripPrefix=2
 
-            - id: transport-service
+            - id: transport-management-service
               uri: lb://TRANSPORT-SERVICE
               predicates:
                 - Path=/api/transport/**
