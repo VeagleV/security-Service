@@ -1,9 +1,7 @@
 package com.crm.security.core.filters;
 
-
 import com.crm.security.core.services.JwtService;
 import io.jsonwebtoken.Claims;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -15,16 +13,18 @@ import org.springframework.web.server.ServerWebExchange;
 
 import java.util.Map;
 
-@Component("authComponentFilter")
-@RequiredArgsConstructor
-public class AuthHeaderFilter extends AbstractGatewayFilterFactory<AuthHeaderFilter.Config> {
+@Component
+public class AuthComponent extends AbstractGatewayFilterFactory<AuthComponent.Config> {
 
     private static final String BEARER_PREFIX = "Bearer ";
-
     private final JwtService jwtService;
 
-    public static class Config {
+    public AuthComponent(JwtService jwtService) {
+        super(Config.class);
+        this.jwtService = jwtService;
+    }
 
+    public static class Config {
         private boolean optional = false;
 
         public boolean isOptional() {
@@ -35,12 +35,6 @@ public class AuthHeaderFilter extends AbstractGatewayFilterFactory<AuthHeaderFil
             this.optional = optional;
         }
     }
-
-    @Override
-    public Config newConfig() {
-        return new Config();
-    }
-
 
     @Override
     public GatewayFilter apply(Config config) {
@@ -65,14 +59,11 @@ public class AuthHeaderFilter extends AbstractGatewayFilterFactory<AuthHeaderFil
 
             ServerWebExchange mutated = exchange.mutate()
                     .request(builder -> {
-                        // чистим то, что мог подсунуть клиент
                         builder.headers(h -> {
                             h.remove("X-User-Id");
                             h.remove("X-User-Name");
                             h.remove("X-User-Role");
                         });
-
-                        // добавляем “доверенные” заголовки
                         headersToAdd.forEach(builder::header);
                     })
                     .build();
@@ -80,5 +71,4 @@ public class AuthHeaderFilter extends AbstractGatewayFilterFactory<AuthHeaderFil
             return chain.filter(mutated);
         };
     }
-
 }

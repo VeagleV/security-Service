@@ -1,6 +1,5 @@
 package com.crm.security.core.controllers;
 
-
 import com.crm.security.core.dto.JwtAuthenticationResponse;
 import com.crm.security.core.dto.SignInRequest;
 import com.crm.security.core.dto.SignUpRequest;
@@ -10,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/auth")
@@ -21,13 +21,13 @@ public class AuthController {
 
     @Operation(summary = "Регистрация пользователя")
     @PostMapping("/register")
-    public JwtAuthenticationResponse signUp(@RequestBody @Valid SignUpRequest request){
+    public Mono<JwtAuthenticationResponse> signUp(@RequestBody @Valid SignUpRequest request){
         return authenticationService.signUp(request);
     }
 
     @Operation(summary = "Аутентификация пользователя")
     @PostMapping("/login")
-    public JwtAuthenticationResponse signIn(@RequestBody @Valid SignInRequest request){
+    public Mono<JwtAuthenticationResponse> signIn(@RequestBody @Valid SignInRequest request){
         return authenticationService.signIn(request);
     }
 }

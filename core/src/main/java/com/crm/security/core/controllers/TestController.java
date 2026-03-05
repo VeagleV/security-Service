@@ -1,47 +1,50 @@
 package com.crm.security.core.controllers;
 
-
 import com.crm.security.core.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/example")
 @RequiredArgsConstructor
 @Tag(name = "ТЕСТ")
 public class TestController {
+
     private final UserService service;
 
     @GetMapping
     @Operation(summary = "Доступен только авторизованным пользователям")
-    public String example() {
-        return "Hello, world!";
+    public Mono<String> example() {
+        return Mono.just("Hello, world!");
     }
 
     @GetMapping("/admin")
-    @Operation(summary = "Доступен только авторизованным пользователям с ролью ADMIN")
+    @Operation(summary = "Доступен только пользователям с ролью ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    public String exampleAdmin() {
-        return "Hello, admin!";
+    public Mono<String> exampleAdmin() {
+        return Mono.just("Hello, admin!");
     }
 
     @GetMapping("/get-admin")
     @Operation(summary = "Получить роль ADMIN (для демонстрации)")
-    public void getAdmin() {
-        service.getAdmin();
+    public Mono<Void> getAdmin() {
+        return Mono.fromRunnable(service::getAdmin);
     }
 
     @GetMapping("/get-super-admin")
     @Operation(summary = "Получить роль SUPER_ADMIN (для демонстрации)")
-    public void getSuperAdmin() { service.getSuperAdmin();}
+    public Mono<Void> getSuperAdmin() {
+        return Mono.fromRunnable(service::getSuperAdmin);
+    }
 
     @GetMapping("/super-admin")
-    @Operation(summary = "Доступен только авторизованным пользователям с ролью ADMIN")
+    @Operation(summary = "Доступен только пользователям с ролью SUPER_ADMIN")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public String exampleSuperAdmin(){ return "Hello, super admin!";}
+    public Mono<String> exampleSuperAdmin() {
+        return Mono.just("Hello, super admin!");
+    }
 }
