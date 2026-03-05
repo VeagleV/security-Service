@@ -2,46 +2,51 @@ spring:
   cloud:
     gateway:
       server:
-        webmvc:
+        webflux:
           routes:
-            - id: security-Service
+            - id: security-service
               uri: lb://SECURITY-SERVICE
               predicates:
                 - Path=/api/security/**
               filters:
-                - name: authHeaderFilter
+                - StripPrefix=2
 
-            - id: algorithm-Service
+            - id: algorithm-service
               uri: lb://ALGORITHM-SERVICE
               predicates:
                 - Path=/api/algo/**
               filters:
-                - name: authHeaderFilter
+                - name: AuthComponent
+                - StripPrefix=2
 
-            - id: warehouse-Service
+            - id: warehouse-service
               uri: lb://WAREHOUSE-SERVICE
               predicates:
                 - Path=/api/warehouse/**
               filters:
-                - name: authHeaderFilter
+                - name: AuthComponent
+                - StripPrefix=2
 
-            - id: transport-Service
+            - id: transport-service
               uri: lb://TRANSPORT-SERVICE
               predicates:
                 - Path=/api/transport/**
               filters:
-                - name: authHeaderFilter
+                - name: AuthComponent
+                - StripPrefix=2
 
-            - id: item-Management-Service
+            - id: item-management-service
               uri: lb://ITEM-MANAGEMENT-SERVICE
               predicates:
                 - Path=/api/items/**
               filters:
-                - name: authHeaderFilter
+                - name: AuthComponent
+                - StripPrefix=2
 
-            - id: delivery-Service
+            - id: delivery-service
               uri: lb://DELIVERY-SERVICE
               predicates:
                 - Path=/api/delivery/**
               filters:
-                - name: authHeaderFilter
+                - name: AuthComponent
+                - StripPrefix=2
