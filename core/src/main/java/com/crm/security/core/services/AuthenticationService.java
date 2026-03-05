@@ -25,7 +25,7 @@ public class AuthenticationService {
                     .email(request.getEmail())
                     .password(passwordEncoder.encode(request.getPassword()))
                     .fio(request.getFio())
-                    .role(UserRoles.MANAGER) // роль по умолчанию
+                    .role(UserRoles.MANAGER)
                     .build();
 
             userService.createUser(user);
