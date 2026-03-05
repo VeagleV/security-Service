@@ -21,7 +21,7 @@ spring:
                 - StripPrefix=2
 
             - id: transport-management-service
-              uri: lb://TRANSPORT-SERVICE
+              uri: lb://TRANSPORT-MANAGEMENT-SERVICE
               predicates:
                 - Path=/api/transport/**
               filters:
