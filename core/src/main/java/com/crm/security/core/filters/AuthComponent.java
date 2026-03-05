@@ -20,7 +20,7 @@ public class AuthComponent extends AbstractGatewayFilterFactory<AuthComponent.Co
     private final JwtService jwtService;
 
     public AuthComponent(JwtService jwtService) {
-        super(Config.class); // КРИТИЧНО
+        super(Config.class);
         this.jwtService = jwtService;
     }
 
